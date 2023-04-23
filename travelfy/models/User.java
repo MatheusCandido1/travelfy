@@ -6,8 +6,11 @@ public class User {
 	String email;
 	String password;
 	
-	User() {}
+	public User() {}
 
+	public void setId(String id) {
+		this.id = id;
+	}
 	public String getId() {
 		return id;
 	}

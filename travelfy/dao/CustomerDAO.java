@@ -1,7 +1,5 @@
 package travelfy.dao;
 
-import java.sql.SQLException;
-
 import travelfy.models.Customer;
 
 public interface CustomerDAO {
