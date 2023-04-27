@@ -51,7 +51,7 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/b9/Downloads/fontawesomefx-8.9.jar">
+	<classpathentry kind="lib" path="/Users/b9/Downloads/fontawesomefx-8.0.1.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>

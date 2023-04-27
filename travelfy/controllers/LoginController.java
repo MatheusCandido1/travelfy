@@ -1,7 +1,5 @@
 package travelfy.controllers;
 
-import java.io.IOException;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,6 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import travelfy.dao.UserDAOImpl;
 import travelfy.models.User;
+import travelfy.models.Vendor;
 
 public class LoginController {
 
@@ -28,34 +27,42 @@ public class LoginController {
     private Button signInButton;
     
     public void navigate(User loggedUser, ActionEvent e) {
-    	// Instantiate the FXMLLoader object for loading the UI 
-    	FXMLLoader loader = new FXMLLoader();
-    	// specify the file location
-    	loader.setLocation(getClass().getResource("/travelfy/views/Dashboard.fxml"));
-    	
-    	// specify the file location for the FXML file for the next window
-    	try {
+    		try {
+        	// Instantiate the FXMLLoader object for loading the UI 
+        	FXMLLoader loader = new FXMLLoader();
+        	// specify the file location
+        	if(loggedUser instanceof Vendor) {
+        		loader.setLocation(getClass().getResource("/travelfy/views/VendorDashboard.fxml"));
+        	} else {
+        		loader.setLocation(getClass().getResource("/travelfy/views/CustomerDashboard.fxml"));
+        	}
     		// the object representing the root node of the scene; load the UI
     		Parent parent = loader.load();
    	
 			// set the scene
 			Scene scene = new Scene(parent);
-    	   	
-	    	// get the current window; i.e. the stage
-			DashboardController controller = loader.getController();
+
+        	if(loggedUser instanceof Vendor) {
+        		// get the current window; i.e. the stage
+        		VendorDashboardController controller = loader.getController();
+    			controller.initData(loggedUser);
+        	} else {
+    			CustomerDashboardController controller = loader.getController();
+    			controller.initData(loggedUser);
+        	}
 			
-			controller.initData(loggedUser);
 	    	// change the title of the window
 	    	Stage stage = (Stage)((Node)e.getSource()).getScene().getWindow();
 	    	// change the title of the window
 	    	stage.setTitle("Travelfy - Dashboard");
 	    	// set the scene for the stage
+	    	stage.setResizable(false);
 	    	stage.setScene(scene);
 	    	
-	    	stage.show();
-			} catch (IOException ex) {
-				System.out.print(ex.getMessage());
-			}
+	    	stage.show(); 
+    		} catch(Exception ex) {
+    			System.out.print(ex.getMessage());
+    		}
     }
     
     public void signInButtonListener(ActionEvent e) {
@@ -71,8 +78,6 @@ public class LoginController {
     		User loggedUser = new User();
     		
     		loggedUser = userDAO.signIn(emailTextField.getText(), passwordTextField.getText());
-    		
-    		
     		if(loggedUser != null) {
     			navigate(loggedUser, e);
     		} else {
@@ -86,6 +91,32 @@ public class LoginController {
     		}
     		
     	}
+    }
+    
+    public void registerButtonListener(ActionEvent e) {
+    	try {
+        	// Instantiate the FXMLLoader object for loading the UI 
+        	FXMLLoader loader = new FXMLLoader();
+        	// specify the file location
+        	loader.setLocation(getClass().getResource("/travelfy/views/Register.fxml"));
+    		// the object representing the root node of the scene; load the UI
+    		Parent parent = loader.load();
+   	
+			// set the scene
+			Scene scene = new Scene(parent);
+    	   	
+	    	// change the title of the window
+	    	Stage stage = (Stage)((Node)e.getSource()).getScene().getWindow();
+	    	// change the title of the window
+	    	stage.setTitle("Travelfy - Create Account");
+	    	// set the scene for the stage
+	    	stage.setResizable(false);
+	    	stage.setScene(scene);
+	    	
+	    	stage.show();
+    		} catch(Exception ex) {
+    			System.out.print(ex.getMessage());
+    		}
     }
 
 }

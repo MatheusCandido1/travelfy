@@ -1,17 +1,18 @@
 package travelfy.models;
 
 public class User {
-	String id;
+	int id;
 	String phone;
 	String email;
 	String password;
+	String role;
 	
 	public User() {}
 
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 	
@@ -32,6 +33,12 @@ public class User {
 	}
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	public String getRole() {
+		return role;
+	}
+	public void setRole(String role) {
+		this.role = role;
 	}
 	
 }

@@ -8,6 +8,7 @@ import java.sql.Statement;
 
 import travelfy.db.Utils;
 import travelfy.models.Customer;
+import travelfy.models.User;
 
 public class CustomerDAOImpl implements CustomerDAO {
 
@@ -22,7 +23,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 			Statement stmt = conn.createStatement();
 			
 			conn.setAutoCommit(false);
-			
+			 
 			String query = "INSERT INTO " + USER_TABLE_NAME + " (phone, email, password) VALUES (?, ?, ?)";
 			PreparedStatement preparedStmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 			
@@ -78,5 +79,4 @@ public class CustomerDAOImpl implements CustomerDAO {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }

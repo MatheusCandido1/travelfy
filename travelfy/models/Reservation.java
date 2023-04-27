@@ -3,47 +3,48 @@ package travelfy.models;
 import java.util.Date;
 
 public class Reservation {
-	String id;
-	Date startDate;
-	Date endDate;
-	String customerId;
-	String attractionId;
+	int id;
+	String startDate;
+	String endDate;
+	int customerId;
+	int attractionId;
 	int numOfPeople;
 	double subtotal;
 	double tax;
 	double total;
 	
 	
-	Reservation() {}
+	public Reservation() {}
 	
-	public String getId() {
+	public int getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
-	public Date getStartDate() {
+	
+	public String getStartDate() {
 		return startDate;
 	}
-	public void setStartDate(Date startDate) {
+	public void setStartDate(String startDate) {
 		this.startDate = startDate;
 	}
-	public Date getEndDate() {
+	public String getEndDate() {
 		return endDate;
 	}
-	public void setEndDate(Date endDate) {
+	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
-	public String getCustomerId() {
+	public int getCustomerId() {
 		return customerId;
 	}
-	public void setCustomerId(String customerId) {
+	public void setCustomerId(int customerId) {
 		this.customerId = customerId;
 	}
-	public String getAttractionId() {
+	public int getAttractionId() {
 		return attractionId;
 	}
-	public void setAttractionId(String attractionId) {
+	public void setAttractionId(int attractionId) {
 		this.attractionId = attractionId;
 	}
 	public int getNumOfPeople() {

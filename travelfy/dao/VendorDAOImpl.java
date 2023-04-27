@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import travelfy.db.Utils;
+import travelfy.models.User;
 import travelfy.models.Vendor;
 
 public class VendorDAOImpl implements VendorDAO {

@@ -1,23 +1,22 @@
 package travelfy.models;
 
 public class Attraction {
-	String id;
+	int id;
 	String name;
-	String typeId;
-	int capacity;
+	String type;
 	double price;
-	String cityId;
-	String stateId;
-	String vendorId;
+	String city;
+	String state;
+	int vendorId;
 	String image;
 	
-	Attraction() {}
+	public Attraction() {}
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -29,20 +28,12 @@ public class Attraction {
 		this.name = name;
 	}
 
-	public String getTypeId() {
-		return typeId;
+	public String getType() {
+		return type;
 	}
 
-	public void setTypeId(String typeId) {
-		this.typeId = typeId;
-	}
-
-	public int getCapacity() {
-		return capacity;
-	}
-
-	public void setCapacity(int capacity) {
-		this.capacity = capacity;
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	public double getPrice() {
@@ -53,27 +44,27 @@ public class Attraction {
 		this.price = price;
 	}
 
-	public String getCityId() {
-		return cityId;
+	public String getCity() {
+		return city;
 	}
 
-	public void setCityId(String cityId) {
-		this.cityId = cityId;
+	public void setCity(String city) {
+		this.city = city;
 	}
 
-	public String getStateId() {
-		return stateId;
+	public String getState() {
+		return state;
 	}
 
-	public void setStateId(String stateId) {
-		this.stateId = stateId;
+	public void setState(String state) {
+		this.state = state;
 	}
 
-	public String getVendorId() {
+	public int getVendorId() {
 		return vendorId;
 	}
 
-	public void setVendorId(String vendorId) {
+	public void setVendorId(int vendorId) {
 		this.vendorId = vendorId;
 	}
 

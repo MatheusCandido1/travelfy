@@ -10,44 +10,15 @@ public class Tables {
 	static Statement stmt;
 	
 	public static void main(String[] args) {
-		createCitiesTable();
-		createStatesTable();
 		createUsersTable();
 		createCustomersTable();
 		createVendorsTable();
-		createTypesTable();
 		createAttractionsTable();
 		createReservationsTable();
 		createReviewsTable();
 	}
 	
-	public static void createCitiesTable() {
-		try {
-			System.out.println("Creating cities table...");
-			stmt = conn.createStatement(); 
-			// Create the table.
-			stmt.execute(
-				"CREATE TABLE cities (id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,name VARCHAR(100));"
-			);   
-		} catch (SQLException e) {
-			System.out.println("Error creating cities table.");
-			System.out.println(e.getMessage());
-		}
-	}
 	
-	public static void createStatesTable() {
-		try {
-			System.out.println("Creating states table...");
-			stmt = conn.createStatement();
-			// Create the table.
-			stmt.execute(
-				"CREATE TABLE states (id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,name VARCHAR(100));"
-			);   
-		} catch (SQLException e) {
-			System.out.println("Error creating states table.");
-			System.out.println(e.getMessage());
-		}
-	}
 	
 	public static void createUsersTable() {
 		try {
@@ -91,27 +62,13 @@ public class Tables {
 		}
 	}
 	
-	public static void createTypesTable() {
-		try {
-			System.out.println("Creating types table...");
-			stmt = conn.createStatement();
-			// Create the table.
-			stmt.execute(
-				"CREATE TABLE types (id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,name VARCHAR(60) NOT NULL);"
-			);   
-		} catch (SQLException e) {
-			System.out.println("Error creating types table.");
-			System.out.println(e.getMessage());
-		}
-	}
-	
 	public static void createAttractionsTable() {
 		try {
 			System.out.println("Creating attractions table...");
 			stmt = conn.createStatement();
 			// Create the table.
 			stmt.execute(
-				"CREATE TABLE attractions (id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, name VARCHAR(60) NOT NULL, type_id int NOT NULL, capacity int NOT NULL, price DOUBLE(9,2) NOT NULL, city_id int NOT NULL, state_id int NOT NULL, vendor_id int NOT NULL, image varchar(255), FOREIGN KEY(type_id) REFERENCES types(id), FOREIGN KEY(city_id) REFERENCES cities(id), FOREIGN KEY(state_id) REFERENCES states(id), FOREIGN KEY(vendor_id) REFERENCES vendors(id));"
+				"CREATE TABLE attractions (id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, name VARCHAR(60) NOT NULL, type varchar(50) NOT NULL, price DOUBLE(9,2) NOT NULL, city varchar(50) NOT NULL, state varchar(50) NOT NULL, vendor_id int NOT NULL, image varchar(255), FOREIGN KEY(vendor_id) REFERENCES vendors(id));"
 			);   
 		} catch (SQLException e) {
 			System.out.println("Error creating attractions table.");
