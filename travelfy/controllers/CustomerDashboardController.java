@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,32 +16,46 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import travelfy.dao.AttractionDAOImpl;
+import travelfy.dao.CustomerDAOImpl;
+import travelfy.dao.CustomerDashboard;
+import travelfy.dao.Dashboard;
 import travelfy.dao.ReservationDAOImpl;
+import travelfy.dao.ReviewDAOImpl;
+import travelfy.dao.VendorDAOImpl;
 import travelfy.models.Attraction;
 import travelfy.models.Customer;
 import travelfy.models.Reservation;
+import travelfy.models.Review;
 import travelfy.models.User;
+import travelfy.models.Vendor;
 
 public class CustomerDashboardController {
 
 	User customer =  new User();
 
 	Attraction selectedAttraction = null;
+	Reservation selectedReservation = null;
+	Review selectedReview = null;
 	
 	@FXML
-	private Button DashboardButton;
+	private Button dashboardMenuButton;
 
 	@FXML
 	private TextField attractionNameTextField;
@@ -78,10 +93,6 @@ public class CustomerDashboardController {
     @FXML
     private Label attractionCityLabel;
 
-
-    @FXML
-    private Label attractionDatesInformation;
-
     @FXML
     private ImageView attractionImageImageView;
 
@@ -107,18 +118,6 @@ public class CustomerDashboardController {
     private Button makeReservationButton;
     
     @FXML
-    private TableColumn<Reservation, String> reservationEndDateColumn;
-
-    @FXML
-    private TableColumn<Reservation, Integer> reservationNumOfPeopleColumn;
-
-    @FXML
-    private TableColumn<Reservation, String> reservationStartDateColumn;
-
-    @FXML
-    private TableView<Reservation> reservationTableView;
-    
-    @FXML
     private Button resetAttractionButton;
 
     @FXML
@@ -126,12 +125,154 @@ public class CustomerDashboardController {
     
     @FXML
     private Pane dashboardPane;
+    @FXML
+    private Label reviewCommentLabel;
+
+    @FXML
+    private TextArea reviewCommentTextArea;
+
+    @FXML
+    private Label reviewRateLabel;
+
+    @FXML
+    private Slider reviewRateSlider;
+
+    @FXML
+    private Button reviewSendReviewButton;
+
+    @FXML
+    private Pane reservationsPane;
     
-    SimpleDateFormat DateFor = new SimpleDateFormat("MM/dd/yyyy");
+    @FXML
+    private Label reviewRatingLabel;
+    
+    @FXML
+    private Label reviewMainLabel;
+    
+    @FXML
+    private TableView<Reservation> reservationsTableView;
+    
+    @FXML
+    private TableColumn<Reservation, String> resevartionsAttractionTableColumn;
+
+    @FXML
+    private TableColumn<Reservation, Integer> resevartionsNumOfPeopleTableColumn;
+
+    @FXML
+    private TableColumn<Reservation, String> resevartionsStartDateTableColumn;
+
+    @FXML
+    private TableColumn<Reservation, String> resevartionsStatusTableColumn;
+
+    @FXML
+    private TableColumn<Reservation, Double> resevartionsTotalTableColumn;
+    
+
+    @FXML
+    private Label dashboardDateLabel;
+
+    @FXML
+    private Label dashboardNumOfPeopleLabel;
+
+    @FXML
+    private Label dashboardReviewAuthor;
+
+    @FXML
+    private Label dashboardReviewComment1;
+
+    @FXML
+    private Label dashboardReviewRate;
+
+    @FXML
+    private Label dashboardTotalLabel;
+    
+    @FXML
+    private Label dashboardAttractionLabel;
+    
+    @FXML
+    private Label nextTripLabel;
+    
+    @FXML
+    private ImageView dashboardAttractionImageImageView;
+
+    
+    SimpleDateFormat DateFormat = new SimpleDateFormat("MM/dd/yyyy");
     DecimalFormat currency = new DecimalFormat("0.00");
     
     static final String SELECTED_MENU = "-fx-background-color: white; -fx-text-fill: #004643; -fx-font-size: 20";
     static final String NON_SELECTED_MENU = "-fx-background-color: #004643; -fx-text-fill: white; -fx-font-size: 20";
+    
+    @FXML
+    void reviewSendReviewButtonListener(ActionEvent event) {
+    	if(reviewCommentTextArea.getText().isEmpty()) {
+	    	Alert alert = new Alert(AlertType.CONFIRMATION);
+	    	alert.setTitle("Review");
+	    	alert.setHeaderText("Create Review");
+	    	alert.setContentText("Are you sure you want to send your review as blank?");
+	    	
+	    	Optional<ButtonType> result = alert.showAndWait();
+	    	if (result.get() == ButtonType.OK)	{
+	        	createReview();
+	        	return;
+	    	} 
+    	} else {
+        	createReview();
+    	}
+    }
+    
+    public void createReview() {
+
+    	ReviewDAOImpl ReviewDAO = new ReviewDAOImpl();
+    	
+    	Review review = new Review();
+    	review.setRate(reviewRateSlider.getValue());
+    	review.setComment(reviewCommentTextArea.getText());
+    	review.setReservationId(selectedReservation.getId());
+    	
+    	if(ReviewDAO.create(review)) {
+    		Alert alert = new Alert(AlertType.INFORMATION);
+	    	alert.setTitle("Create Review");
+	    	alert.setContentText("Review created.");
+
+	    	alert.showAndWait();
+	    	
+	    	selectedReview = review;
+
+			reviewCommentTextArea.setText(selectedReview.getComment());
+			reviewCommentTextArea.setDisable(true);
+			reviewRateSlider.setValue(selectedReview.getRate());
+			reviewRateSlider.setDisable(true);
+			reviewRatingLabel.setText("Rating: " + selectedReview.getRate());
+			reviewSendReviewButton.setDisable(true);
+    	} else {
+    		Alert alert = new Alert(AlertType.WARNING);
+	    	alert.setTitle("Create Review");
+	    	alert.setContentText("Error on create review. Try again later.");
+
+	    	alert.showAndWait();
+    	}
+    }
+    
+    public void loadDashboardStats() {
+    	CustomerDAOImpl CustomerDAO = new CustomerDAOImpl();
+    	
+    	CustomerDashboard dashboard = new CustomerDashboard();
+    	 
+    	dashboard = CustomerDAO.getDashboardStats(((Customer) customer).getCustomerId());
+    	
+    	dashboardDateLabel.setText("Date: " + dashboard.getStartDate());
+    	dashboardNumOfPeopleLabel.setText("Number of People: " + dashboard.getNumOfPeople());
+    	dashboardAttractionLabel.setText("Date: " + dashboard.getAttraction());
+    	dashboardTotalLabel.setText("Total: " + currency.format(dashboard.getTotal()));
+    	nextTripLabel.setText("Your next trip is in "+ dashboard.getDaysUntil() + " days");
+    	if(!dashboard.getImage().isEmpty()) {
+    		dashboardAttractionImageImageView.setVisible(true);
+    		dashboardAttractionImageImageView.setImage(new Image(dashboard.getImage()));
+    	} else {
+    		dashboardAttractionImageImageView.setVisible(false);
+    	}
+    	
+    }
     
 	public void initialize() {
 		setLayout();
@@ -164,15 +305,93 @@ public class CustomerDashboardController {
     	    }
     	});
     	
+    	reviewRateSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+    		reviewRatingLabel.setText("Rating: " + newValue.intValue());
+        });
+    	
 
-    	reservationTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-    	reservationStartDateColumn.setCellValueFactory(new PropertyValueFactory<Reservation, String>("startDate"));
-    	reservationEndDateColumn.setCellValueFactory(new PropertyValueFactory<Reservation, String>("endDate"));
-    	reservationNumOfPeopleColumn.setCellValueFactory(new PropertyValueFactory<Reservation, Integer>("numOfPeople"));
+    	
+    	reservationsTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    	resevartionsStartDateTableColumn.setCellValueFactory(new PropertyValueFactory<Reservation, String>("startDate"));
+    	resevartionsStatusTableColumn.setCellValueFactory(new PropertyValueFactory<Reservation, String>("status"));
+    	resevartionsAttractionTableColumn.setCellValueFactory(new PropertyValueFactory<Reservation, String>("attractionName"));
+    	resevartionsNumOfPeopleTableColumn.setCellValueFactory(new PropertyValueFactory<Reservation, Integer>("numOfPeople"));
+    	resevartionsTotalTableColumn.setCellValueFactory(new PropertyValueFactory<Reservation, Double>("total"));
+    	resevartionsTotalTableColumn.setCellFactory(tc -> new TableCell<Reservation, Double>() {
+    	    @Override
+    	    protected void updateItem(Double value, boolean empty) {
+    	        super.updateItem(value, empty) ;
+    	        if (empty) {
+    	            setText(null);
+    	        } else {
+    	            setText("U$ " + currency.format(value.doubleValue()));
+    	        }
+    	    }
+    	});
+    	
+    	reservationsTableView.setOnMouseClicked(event -> {
+    	    if (event.getClickCount() == 1) { // check if it was a single click
+    	    	selectedReservation = reservationsTableView.getSelectionModel().getSelectedItem();
+    	        if (selectedReservation != null) {
+    	        	showReviewSection();
+    	        }
+    	    }
+    	});
+	}
+	
+	public void hideReviewSection() {
+		 reviewCommentLabel.setVisible(false);
+		 reviewCommentTextArea.setVisible(false);
+		 reviewRateLabel.setVisible(false);
+		 reviewRateSlider.setVisible(false);
+		 reviewSendReviewButton.setVisible(false);
+		 reviewRatingLabel.setVisible(false);
+		 reviewMainLabel.setVisible(false);
+	}
+	
+	public void showReviewSection() {
+		 reviewCommentLabel.setVisible(true);
+		 reviewCommentTextArea.setVisible(true);
+		 reviewRateLabel.setVisible(true);
+		 reviewRateSlider.setVisible(true);
+		 reviewSendReviewButton.setVisible(true);
+		 reviewRatingLabel.setVisible(true);
+		 reviewMainLabel.setVisible(true);
+		 reviewSendReviewButton.setStyle("-fx-background-color: #004643; -fx-text-fill: white");
+		 reviewSendReviewButton.setText("Send Review");
+		 
+
+		 if(!selectedReservation.getStatus().equals("Approved")) {
+			 reviewCommentTextArea.setDisable(true);
+			 reviewRateSlider.setDisable(true);
+			 reviewSendReviewButton.setDisable(true);
+			 reviewSendReviewButton.setStyle("-fx-background-color: #850007; -fx-text-fill: white");
+			 reviewSendReviewButton.setText("You cannot send a review for this reservation");
+			 return;
+		 }
+		 
+		 ReviewDAOImpl ReviewDAO = new ReviewDAOImpl();
+		 selectedReview = ReviewDAO.getReviewByReservationId(selectedReservation.getId());
+		 if(selectedReview != null) {
+			 reviewCommentTextArea.setText(selectedReview.getComment());
+			 reviewCommentTextArea.setDisable(true);
+			 reviewRateSlider.setValue(selectedReview.getRate());
+			 reviewRateSlider.setDisable(true);
+			 reviewRatingLabel.setText("Rating: " + selectedReview.getRate());
+			 reviewSendReviewButton.setDisable(true);
+		 } else {
+			 reviewCommentTextArea.setText("");
+			 reviewCommentTextArea.setDisable(false);
+			 reviewRateSlider.setValue(1);
+			 reviewRateSlider.setDisable(false);
+			 reviewRatingLabel.setText("Rating: 1");
+			 reviewSendReviewButton.setDisable(false);
+		 }
+		
 	}
 	
 	public void setLayout() {
-		DashboardButton.setStyle(SELECTED_MENU);
+		dashboardMenuButton.setStyle(SELECTED_MENU);
 		dashboardPane.setVisible(true);
 		dashboardPane.setLayoutX(282);
 		dashboardPane.setLayoutY(66);
@@ -181,11 +400,17 @@ public class CustomerDashboardController {
 		attractionPane.setVisible(false);
 		attractionPane.setLayoutX(1141);
 		attractionPane.setLayoutY(66);
+		
+		reservationsMenuButton.setStyle(NON_SELECTED_MENU);
+		reservationsPane.setVisible(false);
+		reservationsPane.setLayoutX(288);
+		reservationsPane.setLayoutY(735);
+		
+		
 	}
 	
 	public void showAttractionDetails() {
 		attractionCityLabel.setVisible(true);
-		attractionDatesInformation.setVisible(true);
 		attractionInformationLabel.setVisible(true);
 		attractionNameLabel.setVisible(true);
 		attractionPriceLabel.setVisible(true);
@@ -199,8 +424,6 @@ public class CustomerDashboardController {
 		attractionTypeLabel.setText("Type: " + selectedAttraction.getType());
 		attractionStateLabel.setText("State: " + selectedAttraction.getState());
 		attractionCityLabel.setText("City: " + selectedAttraction.getCity());
-
-		reservationTableView.setVisible(true);
 		
 		if(!selectedAttraction.getImage().isEmpty()) {
     		attractionImageImageView.setVisible(true);
@@ -208,13 +431,10 @@ public class CustomerDashboardController {
     	} else {
     		attractionImageImageView.setVisible(false);
     	}
-		
-		loadReservationsTable();
 	}
 	
 	public void hideAttractionDetails() {
 		attractionCityLabel.setVisible(false);
-		attractionDatesInformation.setVisible(false);
 		attractionInformationLabel.setVisible(false);
 		attractionNameLabel.setVisible(false);
 		attractionPriceLabel.setVisible(false);
@@ -223,24 +443,26 @@ public class CustomerDashboardController {
 		attractionImageImageView.setVisible(false);
 		attractionImageImageView.setImage(null);
 		makeReservationButton.setVisible(false);
-		reservationTableView.setVisible(false);
 	}
+	
+	public void loadReservationsTable(int customerId) {
+    	ReservationDAOImpl ReservationDAO = new ReservationDAOImpl();
+    	
+    	List<Reservation> reservationList = new ArrayList<Reservation>();
+    	
+    	reservationList = ReservationDAO.getReservartionByCustomerId(customerId);
+    	
+    	ObservableList<Reservation> observableReservations = FXCollections.observableArrayList(reservationList);
+    	
+    	reservationsTableView.setItems(observableReservations);
+    	
+    }
 
 	@FXML
 	void attractionSearchButtonListener(ActionEvent event) {
 		loadAttractionsTable(attractionNameTextField.getText());
 	}
 	
-	public void loadReservationsTable() {
-
-		ReservationDAOImpl ReservationDAO = new ReservationDAOImpl();
-    	List<Reservation> reservationList = new ArrayList<Reservation>();
-    	reservationList = ReservationDAO.getReservartionByAttractionId(selectedAttraction.getId());
-    	
-    	ObservableList<Reservation> observableReservations = FXCollections.observableArrayList(reservationList);
-    	
-    	reservationTableView.setItems(observableReservations);
-	}
 	
 	 public void loadAttractionsTable(String name) {
 	    	AttractionDAOImpl AttractionDAO = new AttractionDAOImpl();
@@ -258,6 +480,7 @@ public class CustomerDashboardController {
 	public void initData(User loggedUser) {
 		customer = (Customer) loggedUser;
 		welcomeLabel.setText("Welcome, " + ((Customer) customer).getFirstName());
+		loadDashboardStats();
 	}
 	
 	public void resetAttractionButtonListener(ActionEvent e) {
@@ -290,7 +513,24 @@ public class CustomerDashboardController {
 	}
 	
 	public void reservationsMenuButtonListener(ActionEvent e) {
+		dashboardPane.setVisible(false);
+		dashboardPane.setLayoutX(1141);
+		dashboardPane.setLayoutY(66);
+
+		attractionPane.setVisible(false);
+		attractionPane.setLayoutX(288);
+		attractionPane.setLayoutY(735);
 		
+		reservationsPane.setVisible(true);
+		reservationsPane.setLayoutX(282);
+		reservationsPane.setLayoutY(66);
+
+		reservationsMenuButton.setStyle(SELECTED_MENU);
+		dashboardMenuButton.setStyle(NON_SELECTED_MENU);
+		attractionsMenuButton.setStyle(NON_SELECTED_MENU);
+		
+		hideReviewSection();
+		loadReservationsTable(((Customer)customer).getCustomerId());
 	}
 	
 	public void attractionsMenuButtonListener(ActionEvent e) {
@@ -301,13 +541,18 @@ public class CustomerDashboardController {
 		attractionPane.setVisible(true);
 		attractionPane.setLayoutX(282);
 		attractionPane.setLayoutY(66);
+		
+		reservationsPane.setVisible(false);
+		reservationsPane.setLayoutX(288);
+		reservationsPane.setLayoutY(735);
 
-		DashboardButton.setStyle(NON_SELECTED_MENU);
+		reservationsMenuButton.setStyle(NON_SELECTED_MENU);
+		dashboardMenuButton.setStyle(NON_SELECTED_MENU);
 		attractionsMenuButton.setStyle(SELECTED_MENU);
 		
 	}
 	
-	public void DashboardButtonListener(ActionEvent e) {
+	public void dashboardMenuButtonListener(ActionEvent e) {
 		attractionPane.setVisible(false);
 		attractionPane.setLayoutX(1141);
 		attractionPane.setLayoutY(66);
@@ -316,9 +561,16 @@ public class CustomerDashboardController {
 		dashboardPane.setLayoutX(282);
 		dashboardPane.setLayoutY(66);
 
-		DashboardButton.setStyle(SELECTED_MENU);
+		reservationsPane.setVisible(false);
+		reservationsPane.setLayoutX(288);
+		reservationsPane.setLayoutY(735);
+
+		reservationsMenuButton.setStyle(NON_SELECTED_MENU);
+		dashboardMenuButton.setStyle(SELECTED_MENU);
 		attractionsMenuButton.setStyle(NON_SELECTED_MENU);
+		loadDashboardStats();
 	}
+	
 
 	
 	@FXML

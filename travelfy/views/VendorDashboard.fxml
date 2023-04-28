@@ -10,14 +10,15 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.SVGPath?>
+<?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1150.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="travelfy.controllers.VendorDashboardController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="707.0" prefWidth="1150.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="travelfy.controllers.VendorDashboardController">
    <children>
-      <Pane prefHeight="750.0" prefWidth="260.0" style="-fx-background-color: #004643#004643;">
+      <Pane prefHeight="707.0" prefWidth="260.0" style="-fx-background-color: #004643#004643;">
          <children>
-            <Button fx:id="DashboardButton" layoutX="56.0" layoutY="153.0" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-text-fill: #FFF; -fx-font-size: 20;" text="Dashboard" textFill="WHITE" />
-            <Button fx:id="attractionsMenuButton" layoutX="55.0" layoutY="217.0" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-text-fill: #FFF; -fx-font-size: 20;" text="Attractions" />
-            <Button fx:id="reservationsMenuButton" layoutX="55.0" layoutY="280.0" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-text-fill: #FFF; -fx-font-size: 20;" text="Reservations" />
+            <Button fx:id="dashboardMenuButton" layoutX="62.0" layoutY="153.0" mnemonicParsing="false" onAction="#dashboardMenuButtonListener" style="-fx-background-color: transparent; -fx-text-fill: #FFF; -fx-font-size: 20;" text="Dashboard" textFill="WHITE" />
+            <Button fx:id="attractionsMenuButton" layoutX="62.0" layoutY="217.0" mnemonicParsing="false" onAction="#attractionsMenuButtonListener" style="-fx-background-color: transparent; -fx-text-fill: #FFF; -fx-font-size: 20;" text="Attractions" />
+            <Button fx:id="reservationsMenuButton" layoutX="63.0" layoutY="280.0" mnemonicParsing="false" onAction="#reservationsMenuButtonListener" style="-fx-background-color: transparent; -fx-text-fill: #FFF; -fx-font-size: 20;" text="Reservations" />
             <SVGPath content="M0.318182 5.84091V2.09091H26.5V5.84091H15.5227V37H11.2955V5.84091H0.318182ZM29.7599 37V10.8182H33.6463V14.7727H33.919C34.3963 13.4773 35.2599 12.4261 36.5099 11.6193C37.7599 10.8125 39.169 10.4091 40.7372 10.4091C41.0327 10.4091 41.402 10.4148 41.8452 10.4261C42.2884 10.4375 42.6236 10.4545 42.8509 10.4773V14.5682C42.7145 14.5341 42.402 14.483 41.9134 14.4148C41.4361 14.3352 40.9304 14.2955 40.3963 14.2955C39.1236 14.2955 37.9872 14.5625 36.9872 15.0966C35.9986 15.6193 35.2145 16.3466 34.6349 17.2784C34.0668 18.1989 33.7827 19.25 33.7827 20.4318V37H29.7599ZM55.3239 37.6136C53.6648 37.6136 52.1591 37.3011 50.8068 36.6761C49.4545 36.0398 48.3807 35.125 47.5852 33.9318C46.7898 32.7273 46.392 31.2727 46.392 29.5682C46.392 28.0682 46.6875 26.8523 47.2784 25.9205C47.8693 24.9773 48.6591 24.2386 49.6477 23.7045C50.6364 23.1705 51.7273 22.7727 52.9205 22.5114C54.125 22.2386 55.3352 22.0227 56.5511 21.8636C58.142 21.6591 59.4318 21.5057 60.4205 21.4034C61.4205 21.2898 62.1477 21.1023 62.6023 20.8409C63.0682 20.5795 63.3011 20.125 63.3011 19.4773V19.3409C63.3011 17.6591 62.8409 16.3523 61.9205 15.4205C61.0114 14.4886 59.6307 14.0227 57.7784 14.0227C55.858 14.0227 54.3523 14.4432 53.2614 15.2841C52.1705 16.125 51.4034 17.0227 50.9602 17.9773L47.142 16.6136C47.8239 15.0227 48.733 13.7841 49.8693 12.8977C51.017 12 52.267 11.375 53.6193 11.0227C54.983 10.6591 56.3239 10.4773 57.642 10.4773C58.483 10.4773 59.4489 10.5795 60.5398 10.7841C61.642 10.9773 62.7045 11.3807 63.7273 11.9943C64.7614 12.608 65.6193 13.5341 66.3011 14.7727C66.983 16.0114 67.3239 17.6705 67.3239 19.75V37H63.3011V33.4545H63.0966C62.8239 34.0227 62.3693 34.6307 61.733 35.2784C61.0966 35.9261 60.25 36.4773 59.1932 36.9318C58.1364 37.3864 56.8466 37.6136 55.3239 37.6136ZM55.9375 34C57.5284 34 58.8693 33.6875 59.9602 33.0625C61.0625 32.4375 61.892 31.6307 62.4489 30.642C63.017 29.6534 63.3011 28.6136 63.3011 27.5227V23.8409C63.1307 24.0455 62.7557 24.233 62.1761 24.4034C61.608 24.5625 60.9489 24.7045 60.1989 24.8295C59.4602 24.9432 58.7386 25.0455 58.0341 25.1364C57.3409 25.2159 56.7784 25.2841 56.3466 25.3409C55.3011 25.4773 54.3239 25.6989 53.4148 26.0057C52.517 26.3011 51.7898 26.75 51.233 27.3523C50.6875 27.9432 50.4148 28.75 50.4148 29.7727C50.4148 31.1705 50.9318 32.2273 51.9659 32.9432C53.0114 33.6477 54.3352 34 55.9375 34ZM95.1378 10.8182L85.456 37H81.3651L71.6832 10.8182H76.0469L83.2741 31.6818H83.5469L90.7741 10.8182H95.1378ZM110.487 37.5455C107.964 37.5455 105.788 36.9886 103.959 35.875C102.141 34.75 100.737 33.1818 99.7486 31.1705C98.7713 29.1477 98.2827 26.7955 98.2827 24.1136C98.2827 21.4318 98.7713 19.0682 99.7486 17.0227C100.737 14.9659 102.112 13.3636 103.874 12.2159C105.646 11.0568 107.714 10.4773 110.078 10.4773C111.442 10.4773 112.788 10.7045 114.118 11.1591C115.447 11.6136 116.658 12.3523 117.749 13.375C118.839 14.3864 119.709 15.7273 120.357 17.3977C121.004 19.0682 121.328 21.125 121.328 23.5682V25.2727H101.146V21.7955H117.237C117.237 20.3182 116.942 19 116.351 17.8409C115.771 16.6818 114.942 15.767 113.862 15.0966C112.794 14.4261 111.533 14.0909 110.078 14.0909C108.476 14.0909 107.089 14.4886 105.919 15.2841C104.76 16.0682 103.868 17.0909 103.243 18.3523C102.618 19.6136 102.305 20.9659 102.305 22.4091V24.7273C102.305 26.7045 102.646 28.3807 103.328 29.7557C104.021 31.1193 104.982 32.1591 106.209 32.875C107.436 33.5795 108.862 33.9318 110.487 33.9318C111.544 33.9318 112.499 33.7841 113.351 33.4886C114.214 33.1818 114.959 32.7273 115.584 32.125C116.209 31.5114 116.692 30.75 117.033 29.8409L120.919 30.9318C120.51 32.25 119.822 33.4091 118.857 34.4091C117.891 35.3977 116.697 36.1705 115.277 36.7273C113.857 37.2727 112.26 37.5455 110.487 37.5455ZM131.47 2.09091V37H127.447V2.09091H131.47ZM150.497 10.8182V14.2273H136.384V10.8182H150.497ZM140.611 37V7.20455C140.611 5.70454 140.963 4.45454 141.668 3.45454C142.372 2.45454 143.287 1.70454 144.412 1.20454C145.537 0.704543 146.724 0.454543 147.974 0.454543C148.963 0.454543 149.77 0.534089 150.395 0.693181C151.02 0.852271 151.486 0.999998 151.793 1.13636L150.634 4.61364C150.429 4.54545 150.145 4.46023 149.781 4.35795C149.429 4.25568 148.963 4.20454 148.384 4.20454C147.054 4.20454 146.094 4.53977 145.503 5.21023C144.923 5.88068 144.634 6.86364 144.634 8.15909V37H140.611ZM158.726 46.8182C158.044 46.8182 157.436 46.7614 156.902 46.6477C156.368 46.5455 155.999 46.4432 155.794 46.3409L156.817 42.7955C157.794 43.0455 158.658 43.1364 159.408 43.0682C160.158 43 160.822 42.6648 161.402 42.0625C161.993 41.4716 162.533 40.5114 163.021 39.1818L163.771 37.1364L154.089 10.8182H158.453L165.68 31.6818H165.953L173.18 10.8182H177.544L166.43 40.8182C165.93 42.1705 165.311 43.2898 164.572 44.1761C163.834 45.0739 162.976 45.7386 161.999 46.1705C161.033 46.6023 159.942 46.8182 158.726 46.8182Z" fill="WHITE" layoutX="41.0" layoutY="31.0" />
             <SVGPath content="M11.3103 1.77586C11.6966 1.40805 12.3034 1.40805 12.6897 1.77586L20.6897 9.39491L23.1897 11.7759C23.5896 12.1567 23.605 12.7897 23.2241 13.1897C22.8433 13.5896 22.2103 13.605 21.8103 13.2241L21 12.4524V20C21 21.1046 20.1046 22 19 22H14H10H5C3.89543 22 3 21.1046 3 20V12.4524L2.18966 13.2241C1.78972 13.605 1.15675 13.5896 0.775862 13.1897C0.394976 12.7897 0.410414 12.1567 0.810345 11.7759L3.31034 9.39491L11.3103 1.77586ZM5 10.5476V20H9V15C9 13.3431 10.3431 12 12 12C13.6569 12 15 13.3431 15 15V20H19V10.5476L12 3.88095L5 10.5476ZM13 20V15C13 14.4477 12.5523 14 12 14C11.4477 14 11 14.4477 11 15V20H13Z" fill="WHITE" layoutX="29.0" layoutY="160.0" />
             <SVGPath content="M4 3C4.55228 3 5 3.44772 5 4V5H7V4C7 3.44772 7.44772 3 8 3C8.55228 3 9 3.44772 9 4V5H11V4C11 3.44772 11.4477 3 12 3C12.5523 3 13 3.44772 13 4V5H15V4C15 3.44772 15.4477 3 16 3C16.5523 3 17 3.44772 17 4V5H19V4C19 3.44772 19.4477 3 20 3C20.5523 3 21 3.44772 21 4V6V18C21 19.6569 19.6569 21 18 21H6C4.34315 21 3 19.6569 3 18V6V4C3 3.44772 3.44772 3 4 3ZM19 7H16H12H8H5V18C5 18.5523 5.44772 19 6 19H18C18.5523 19 19 18.5523 19 18V7ZM13 10C13 10.5523 12.5523 11 12 11C11.4477 11 11 10.5523 11 10C11 9.44771 11.4477 9 12 9C12.5523 9 13 9.44771 13 10ZM16 11C16.5523 11 17 10.5523 17 10C17 9.44771 16.5523 9 16 9C15.4477 9 15 9.44771 15 10C15 10.5523 15.4477 11 16 11ZM9 13C9 13.5523 8.55228 14 8 14C7.44772 14 7 13.5523 7 13C7 12.4477 7.44772 12 8 12C8.55228 12 9 12.4477 9 13ZM12 14C12.5523 14 13 13.5523 13 13C13 12.4477 12.5523 12 12 12C11.4477 12 11 12.4477 11 13C11 13.5523 11.4477 14 12 14ZM17 13C17 13.5523 16.5523 14 16 14C15.4477 14 15 13.5523 15 13C15 12.4477 15.4477 12 16 12C16.5523 12 17 12.4477 17 13ZM8 17C8.55228 17 9 16.5523 9 16C9 15.4477 8.55228 15 8 15C7.44772 15 7 15.4477 7 16C7 16.5523 7.44772 17 8 17ZM13 16C13 16.5523 12.5523 17 12 17C11.4477 17 11 16.5523 11 16C11 15.4477 11.4477 15 12 15C12.5523 15 13 15.4477 13 16ZM16 17C16.5523 17 17 16.5523 17 16C17 15.4477 16.5523 15 16 15C15.4477 15 15 15.4477 15 16C15 16.5523 15.4477 17 16 17Z" fill="WHITE" layoutX="29.0" layoutY="224.0" />
@@ -30,7 +31,7 @@
             <SVGPath content="M7 9C7 6.23858 9.23858 4 12 4C14.7614 4 17 6.23858 17 9V11.1707C18.1652 11.5825 19 12.6938 19 14V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V14C5 12.6938 5.83481 11.5825 7 11.1707V9ZM9 11H15V9C15 7.34315 13.6569 6 12 6C10.3431 6 9 7.34315 9 9V11ZM8 13C7.44772 13 7 13.4477 7 14V18C7 18.5523 7.44772 19 8 19H16C16.5523 19 17 18.5523 17 18V14C17 13.4477 16.5523 13 16 13H8Z" fill="WHITE" layoutX="798.0" layoutY="11.0" />
          </children>
       </Pane>
-      <Pane fx:id="attractionPane" layoutX="282.0" layoutY="66.0" prefHeight="614.0" prefWidth="845.0" style="-fx-background-color: #E5E4E2;">
+      <Pane fx:id="attractionPane" layoutX="282.0" layoutY="66.0" prefHeight="625.0" prefWidth="845.0" style="-fx-background-color: #E5E4E2;">
          <children>
             <Label layoutX="43.0" layoutY="34.0" text="Name:" />
             <Label layoutX="233.0" layoutY="34.0" text="Type:" />
@@ -57,8 +58,63 @@
             </TableView>
             <Button fx:id="attractionDeleteButton" layoutX="719.0" layoutY="258.0" minWidth="53.0" mnemonicParsing="false" onAction="#attractionDeleteButtonListener" prefHeight="38.0" prefWidth="95.0" text="Delete" />
             <Button fx:id="attractionResetButton" layoutX="155.0" layoutY="258.0" minWidth="53.0" mnemonicParsing="false" onAction="#attractionResetButtonListener" prefHeight="38.0" prefWidth="95.0" text="Reset" />
+            <Label layoutX="293.0" layoutY="8.0" style="-fx-font-size: 20;" text="Manage Attractions" />
          </children>
       </Pane>
+      <Pane fx:id="reservationPane" layoutX="1140.0" layoutY="66.0" prefHeight="625.0" prefWidth="845.0" style="-fx-background-color: #E5E4E2;">
+         <children>
+            <TableView fx:id="reservationsTableView" layoutX="48.0" layoutY="50.0" prefHeight="354.0" prefWidth="752.0">
+              <columns>
+                <TableColumn fx:id="startDateTableColumn" prefWidth="98.0" text="Start Date" />
+                  <TableColumn fx:id="attractionNameTableColumn" prefWidth="130.5" text="Attraction" />
+                  <TableColumn fx:id="statusTableColumn" prefWidth="106.0" text="Status" />
+                  <TableColumn fx:id="customerEmailTableColumn" prefWidth="150.0" text="Customer E-mail" />
+                  <TableColumn fx:id="numOfPeopleTableColumn" prefWidth="116.0" text="Number of People" />
+                  <TableColumn fx:id="totalTableColumn" prefWidth="150.0" text="Total" />
+              </columns>
+            </TableView>
+            <Button fx:id="reservationApproveButton" layoutX="48.0" layoutY="570.0" mnemonicParsing="false" onAction="#reservationApproveButtonListener" prefHeight="38.0" prefWidth="89.0" style="-fx-background-color: #004643; -fx-text-fill: white;" text="Approve" />
+            <Button fx:id="reservationDenyButton" layoutX="148.0" layoutY="571.0" mnemonicParsing="false" onAction="#reservationDenyButtonListener" prefHeight="38.0" prefWidth="79.0" style="-fx-background-color: #850007; -fx-text-fill: white;" text="Deny" />
+            <Button fx:id="reservationResetButton" layoutX="750.0" layoutY="421.0" mnemonicParsing="false" onAction="#reservationResetButtonListener" style="-fx-background-color: white;" text="Reset" />
+            <Label fx:id="reservationStartDateLabel" layoutX="48.0" layoutY="433.0" text="Date:" />
+            <Label fx:id="reservationAttractionLabel" layoutX="48.0" layoutY="468.0" text="Attraction:" />
+            <Label fx:id="reservationCustomerEmailLabel" layoutX="268.0" layoutY="433.0" text="Customer Email:" />
+            <Label fx:id="reservationNumOfPeopleLabel" layoutX="268.0" layoutY="468.0" text="Number of People:" />
+            <Label fx:id="reservationTotalLabel" layoutX="48.0" layoutY="504.0" text="Total: " />
+            <Label layoutX="332.0" layoutY="14.0" style="-fx-font-size: 20;" text="Manage Reservations" />
+            <Pane fx:id="reservationStatusPane" layoutX="251.0" layoutY="570.0" prefHeight="46.0" prefWidth="134.0" style="-fx-background-radius: 6px; -fx-border-radius: 6px;">
+               <children>
+                  <Text fx:id="reservationStatusText" layoutX="1.0" layoutY="26.0" strokeLineCap="ROUND" strokeWidth="0.0" style="-fx-fill: white;" text="Text" textAlignment="CENTER" wrappingWidth="134.0" />
+               </children>
+            </Pane>
+         </children>
+      </Pane>
+      <Pane fx:id="dashboardPane" layoutX="258.0" layoutY="707.0" prefHeight="625.0" prefWidth="845.0" style="-fx-background-color: #E5E4E2;">
+         <children>
+            <Label layoutX="369.0" layoutY="23.0" style="-fx-font-size: 20;" text="Dashboard" />
+            <Pane layoutX="46.0" layoutY="84.0" prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-color: #004643#004643; -fx-border-radius: 8px; -fx-background-radius: 8px;">
+               <children>
+                  <Label layoutX="40.0" layoutY="14.0" style="-fx-font-size: 20;" text="Total Revenue" />
+                  <Label fx:id="dashboardTotalRevenueLabel" layoutX="32.0" layoutY="57.0" prefHeight="50.0" prefWidth="160.0" style="-fx-font-size: 32;" text="\$ 0,00" />
+               </children>
+            </Pane>
+            <Pane layoutX="255.0" layoutY="84.0" prefHeight="150.0" prefWidth="335.0" style="-fx-background-color: white; -fx-border-color: #004643#004643; -fx-border-radius: 8px; -fx-background-radius: 8px;">
+               <children>
+                  <Label layoutX="63.0" layoutY="14.0" style="-fx-font-size: 20;" text="Most Famous Attractions" />
+                  <Label fx:id="dashboardAttration1Label" layoutX="42.0" layoutY="50.0" text="Label" />
+                  <Label fx:id="dashboardAttration2Label" layoutX="43.0" layoutY="82.0" text="Label" />
+                  <Label fx:id="dashboardAttration3Label" layoutX="43.0" layoutY="115.0" text="Label" />
+               </children>
+            </Pane>
+            <Pane layoutX="600.0" layoutY="84.0" prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-color: #004643#004643; -fx-border-radius: 8px; -fx-background-radius: 8px;">
+               <children>
+                  <Label layoutX="50.0" layoutY="13.0" style="-fx-font-size: 20;" text="Reservations" />
+                  <Label fx:id="dashboardApprovedReservationsLabel" layoutX="83.0" layoutY="50.0" style="-fx-font-size: 32;" text="0" />
+                  <Button fx:id="dashboardPendingReservationsButton" layoutX="-3.0" layoutY="112.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="209.0" style="-fx-background-color: transparent;" text="(3) pending reservations" />
+               </children>
+            </Pane>
+         </children></Pane>
+      <SVGPath content="M332,2769 C332,2767.895 332.895,2767 334,2767 C335.105,2767 336,2767.895 336,2769 C336,2770.105 335.105,2771 334,2771 C332.895,2771 332,2770.105 332,2769 L332,2769 Z M340.343,2765 C341.972,2765 342,2765.384 342,2766.657 L340.343,2765 Z M340.343,2773 L342,2771.343 C342,2772.97 341.62,2773 340.343,2773 L340.343,2773 Z M326,2771.343 L327.657,2773 C326.03,2773 326,2772.62 326,2771.343 L326,2771.343 Z M327.657,2765 L326,2766.657 C326,2765.028 326.384,2765 327.657,2765 L327.657,2765 Z M337.515,2765 L341.515,2769 L337.515,2773 L330.485,2773 L326.485,2769 L330.485,2765 L337.515,2765 Z M342,2763 L326,2763 C324.895,2763 324,2763.895 324,2765 L324,2773 C324,2774.105 324.895,2775 326,2775 L342,2775 C343.105,2775 344,2774.105 344,2773 L344,2765 C344,2763.895 343.105,2763 342,2763 L342,2763 Z" layoutX="640.0" layoutY="-330.0" />
    </children>
    <opaqueInsets>
       <Insets />

@@ -82,7 +82,7 @@ public class Tables {
 			stmt = conn.createStatement();
 			// Create the table.
 			stmt.execute(
-				"CREATE TABLE reservations (id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, start_date DATE NOT NULL, end_date DATE NOT NULL, customer_id int NOT NULL, attraction_id int NOT NULL, num_of_people int NOT NULL, subtotal DOUBLE(9,2) NOT NULL, tax DOUBLE(9,2) NOT NULL, total DOUBLE(9,2) NOT NULL, FOREIGN KEY(customer_id) REFERENCES customers(id), FOREIGN KEY(attraction_id) REFERENCES attractions(id));"
+				"CREATE TABLE reservations (id int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, start_date DATE NOT NULL, status varchar(40) NOT NULL, customer_id int NOT NULL, attraction_id int NOT NULL, num_of_people int NOT NULL, subtotal DOUBLE(9,2) NOT NULL, tax DOUBLE(9,2) NOT NULL, total DOUBLE(9,2) NOT NULL, FOREIGN KEY(customer_id) REFERENCES customers(id), FOREIGN KEY(attraction_id) REFERENCES attractions(id));"
 			);   
 		} catch (SQLException e) {
 			System.out.println("Error creating reservations table.");

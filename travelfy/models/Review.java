@@ -4,8 +4,9 @@ public class Review {
 	String id;
 	double rate;
 	String comment;
+	int reservationId;
 	
-	Review() {}
+	public Review() {}
 
 	public String getId() {
 		return id;
@@ -19,8 +20,8 @@ public class Review {
 		return rate;
 	}
 
-	public void setRate(double rate) {
-		this.rate = rate;
+	public void setRate(double d) {
+		this.rate = d;
 	}
 
 	public String getComment() {
@@ -29,6 +30,13 @@ public class Review {
 
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+	public int getReservationId() {
+		return reservationId;
+	}
+
+	public void setReservationId(int reservationId) {
+		this.reservationId = reservationId;
 	}
 	
 	

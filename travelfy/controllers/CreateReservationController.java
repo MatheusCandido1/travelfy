@@ -48,9 +48,6 @@ public class CreateReservationController {
     private Label attractionTypeLabel;
 
     @FXML
-    private DatePicker endDateDatePicker;
-
-    @FXML
     private Button goBackButton;
 
     @FXML
@@ -89,7 +86,7 @@ public class CreateReservationController {
 		attractionPriceLabel.setText("Price: " + currency.format(selectedAttraction.getPrice()));
 		attractionTypeLabel.setText("Type: " + selectedAttraction.getType());
 		attractionStateLabel.setText("State: " + selectedAttraction.getState());
-		attractionCityLabel.setText("City: " + selectedAttraction.getCity());
+		attractionCityLabel.setText("City: " + selectedAttraction.getCity()); 
 		if(!selectedAttraction.getImage().isEmpty()) {
     		attractionImageImageView.setVisible(true);
     		attractionImageImageView.setImage(new Image(selectedAttraction.getImage()));
@@ -157,10 +154,10 @@ public class CreateReservationController {
     	
     	reservation.setAttractionId(currentAttraction.getId());
     	reservation.setStartDate(startDateDatePicker.getValue().format(formatter));
-    	reservation.setEndDate(endDateDatePicker.getValue().format(formatter));
     	reservation.setCustomerId(currentCustomer.getCustomerId());
     	reservation.setAttractionId(currentAttraction.getId());
     	reservation.setNumOfPeople(Integer.parseInt(numOfPeopleTextField.getText()));
+    	reservation.setStatus("Pending");
     	
     	String result = ReservationDAO.create(reservation);
     	
@@ -171,7 +168,6 @@ public class CreateReservationController {
 	    	
 	    	alert.showAndWait();
 	    	startDateDatePicker.setValue(null);
-	    	endDateDatePicker.setValue(null);
     		return;
     	}
     	

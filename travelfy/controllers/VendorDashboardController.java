@@ -26,10 +26,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import travelfy.dao.AttractionDAOImpl;
+import travelfy.dao.Dashboard;
+import travelfy.dao.ReservationDAOImpl;
+import travelfy.dao.VendorDAOImpl;
 import travelfy.db.Constants;
 import travelfy.models.Attraction;
+import travelfy.models.Reservation;
 import travelfy.models.User;
 import travelfy.models.Vendor;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -41,9 +46,10 @@ public class VendorDashboardController {
 	
 	boolean isUpdatingAttraction = false;
 	Attraction selectedAttraction = null;
+	Reservation selectedReservation = null;
 
     @FXML
-    private Button DashboardButton;
+    private Button dashboardMenuButton;
 
     @FXML
     private Button attractionsMenuButton;
@@ -100,10 +106,160 @@ public class VendorDashboardController {
 
     @FXML
     private Button attractionResetButton;
+    
+    @FXML
+    private Pane reservationPane;
+    @FXML
+    private Pane dashboardPane;
+    // SIZE  W 1150
+    // SIZE H 707
+
+    @FXML
+    private TableView<Reservation> reservationsTableView;
+
+    @FXML
+    private TableColumn<Reservation, String> startDateTableColumn;
+
+    @FXML
+    private TableColumn<Reservation, String> statusTableColumn;
+    
+    @FXML
+    private TableColumn<Reservation, String> attractionNameTableColumn;
+
+    @FXML
+    private TableColumn<Reservation, Double> totalTableColumn;
+
+    @FXML
+    private TableColumn<Reservation, String> customerEmailTableColumn;
+
+    @FXML
+    private TableColumn<Reservation, Integer> numOfPeopleTableColumn;
+    
+    @FXML
+    private Button reservationApproveButton;
+
+    @FXML
+    private Label reservationAttractionLabel;
+
+    @FXML
+    private Label reservationCustomerEmailLabel;
+
+    @FXML
+    private Button reservationDenyButton;
+
+    @FXML
+    private Label reservationNumOfPeopleLabel;
+
+    @FXML
+    private Button reservationResetButton;
+
+    @FXML
+    private Label reservationStartDateLabel;
+
+    @FXML
+    private Label reservationTotalLabel;
+    
+    @FXML
+    private Pane reservationStatusPane;
+
+    @FXML
+    private Text reservationStatusText;
+
+    @FXML
+    private Label dashboardTotalRevenueLabel;
+    
+    @FXML
+    private Label dashboardApprovedReservationsLabel;
+
+    @FXML
+    private Label dashboardAttration1Label;
+
+    @FXML
+    private Label dashboardAttration2Label;
+
+    @FXML
+    private Label dashboardAttration3Label;
+
+    @FXML
+    private Button dashboardPendingReservationsButton;
+
 
     DecimalFormat currency = new DecimalFormat("0.00");
+
+    static final String SELECTED_MENU = "-fx-background-color: white; -fx-text-fill: #004643; -fx-font-size: 20";
+    static final String NON_SELECTED_MENU = "-fx-background-color: #004643; -fx-text-fill: white; -fx-font-size: 20";
+    
+    public void reservationsMenuButtonListener(ActionEvent e) {
+
+    	vendor = (Vendor) vendor;
+    	dashboardMenuButton.setStyle(NON_SELECTED_MENU);
+		dashboardPane.setVisible(false);
+		dashboardPane.setLayoutX(1141);
+		dashboardPane.setLayoutY(66);
+		loadReservationTable(((Vendor)vendor).getVendorId());
+
+		attractionsMenuButton.setStyle(NON_SELECTED_MENU);
+		attractionPane.setVisible(false);
+		attractionPane.setLayoutX(284);
+		attractionPane.setLayoutY(700);
+
+		reservationsMenuButton.setStyle(SELECTED_MENU);
+		reservationPane.setVisible(true);
+		reservationPane.setLayoutX(282);
+		reservationPane.setLayoutY(66); 
+		
+		reservationApproveButton.setVisible(false);
+		reservationAttractionLabel.setVisible(false);
+		reservationCustomerEmailLabel.setVisible(false);
+		reservationDenyButton.setVisible(false);
+		reservationNumOfPeopleLabel.setVisible(false);
+		reservationResetButton.setVisible(false);
+		reservationStartDateLabel.setVisible(false);
+		reservationTotalLabel.setVisible(false);
+		reservationStatusPane.setVisible(false);
+		reservationStatusText.setVisible(false);
+	}
+	
+	public void attractionsMenuButtonListener(ActionEvent e) {
+		dashboardMenuButton.setStyle(NON_SELECTED_MENU);
+		dashboardPane.setVisible(false);
+		dashboardPane.setLayoutX(1141);
+		dashboardPane.setLayoutY(66);
+
+		attractionsMenuButton.setStyle(SELECTED_MENU);
+		attractionPane.setVisible(true);
+		attractionPane.setLayoutX(282);
+		attractionPane.setLayoutY(66);
+
+		reservationsMenuButton.setStyle(NON_SELECTED_MENU);
+		reservationPane.setVisible(false);
+		reservationPane.setLayoutX(284);
+		reservationPane.setLayoutY(700);
+	}
+	
+	public void dashboardMenuButtonListener(ActionEvent e) {
+		dashboardMenuButton.setStyle(SELECTED_MENU);
+		dashboardPane.setVisible(true);
+		dashboardPane.setLayoutX(282);
+		dashboardPane.setLayoutY(66);
+		
+		attractionsMenuButton.setStyle(NON_SELECTED_MENU);
+		attractionPane.setVisible(false);
+		attractionPane.setLayoutX(1141);
+		attractionPane.setLayoutY(66);
+		
+		reservationsMenuButton.setStyle(NON_SELECTED_MENU);
+		reservationPane.setVisible(false);
+		reservationPane.setLayoutX(284);
+		reservationPane.setLayoutY(700);
+
+    	vendor = (Vendor) vendor;
+		loadDashboardStats();
+
+	}
     
     public void initialize() {
+    	setLayout();
     	attractionDeleteButton.setVisible(false);
     	// set up the columns in the table
     	attractionsTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -114,6 +270,25 @@ public class VendorDashboardController {
 
     	priceTableColumn.setCellValueFactory(new PropertyValueFactory<Attraction, Double>("price"));
     	priceTableColumn.setCellFactory(tc -> new TableCell<Attraction, Double>() {
+    	    @Override
+    	    protected void updateItem(Double value, boolean empty) {
+    	        super.updateItem(value, empty) ;
+    	        if (empty) {
+    	            setText(null);
+    	        } else {
+    	            setText("U$ " + currency.format(value.doubleValue()));
+    	        }
+    	    }
+    	});
+    	
+    	reservationsTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    	startDateTableColumn.setCellValueFactory(new PropertyValueFactory<Reservation, String>("startDate"));
+    	statusTableColumn.setCellValueFactory(new PropertyValueFactory<Reservation, String>("status"));
+    	attractionNameTableColumn.setCellValueFactory(new PropertyValueFactory<Reservation, String>("attractionName"));
+    	customerEmailTableColumn.setCellValueFactory(new PropertyValueFactory<Reservation, String>("customerEmail"));
+    	numOfPeopleTableColumn.setCellValueFactory(new PropertyValueFactory<Reservation, Integer>("numOfPeople"));
+    	totalTableColumn.setCellValueFactory(new PropertyValueFactory<Reservation, Double>("total"));
+    	totalTableColumn.setCellFactory(tc -> new TableCell<Reservation, Double>() {
     	    @Override
     	    protected void updateItem(Double value, boolean empty) {
     	        super.updateItem(value, empty) ;
@@ -139,8 +314,121 @@ public class VendorDashboardController {
     	});
     	
     	
-    	
+    	reservationsTableView.setOnMouseClicked(event -> {
+    	    if (event.getClickCount() == 1) { // check if it was a single click
+    	        selectedReservation = reservationsTableView.getSelectionModel().getSelectedItem();
+    	        if (selectedReservation != null) {
+    	        	prepareFormToUpdateReservation();
+    	        }
+    	    }
+    	});
     }
+    
+	public void setLayout() {
+		dashboardMenuButton.setStyle(SELECTED_MENU);
+		dashboardPane.setVisible(true);
+		dashboardPane.setLayoutX(282);
+		dashboardPane.setLayoutY(66);
+		
+		attractionsMenuButton.setStyle(NON_SELECTED_MENU);
+		attractionPane.setVisible(false);
+		attractionPane.setLayoutX(1141);
+		attractionPane.setLayoutY(66);
+		
+		reservationsMenuButton.setStyle(NON_SELECTED_MENU);
+		reservationPane.setVisible(false);
+		reservationPane.setLayoutX(284);
+		reservationPane.setLayoutY(700);
+	}
+	
+	public void prepareFormToUpdateReservation() {
+		
+		reservationAttractionLabel.setVisible(true);
+		reservationCustomerEmailLabel.setVisible(true);
+		reservationNumOfPeopleLabel.setVisible(true);
+		reservationResetButton.setVisible(true);
+		reservationStartDateLabel.setVisible(true);
+		reservationTotalLabel.setVisible(true);
+		if(selectedReservation.getStatus().equals("Pending")) {
+			reservationApproveButton.setVisible(true);
+			reservationDenyButton.setVisible(true);
+			reservationStatusPane.setVisible(false);
+			reservationStatusText.setVisible(false);
+		} else {
+			reservationStatusPane.setVisible(true);
+			reservationStatusText.setVisible(true);
+			reservationApproveButton.setVisible(false);
+			reservationDenyButton.setVisible(false);
+			if(selectedReservation.getStatus().equals("Approved")) {
+				reservationStatusPane.setStyle("-fx-background-color: #004643");
+				reservationStatusText.setText("Approved");
+			} else {
+				reservationStatusPane.setStyle("-fx-background-color: #850007");
+				reservationStatusText.setText("Not Approved");
+			}
+		}
+		
+		reservationStartDateLabel.setText("Date: " + selectedReservation.getStartDate());
+		reservationAttractionLabel.setText("Attraction: " + selectedReservation.getAttractionName());
+		reservationNumOfPeopleLabel.setText("Number of People: " + selectedReservation.getNumOfPeople());
+		reservationTotalLabel.setText("Total: $" + currency.format(selectedReservation.getTotal()));
+		reservationCustomerEmailLabel.setText("Customer Email: " + selectedReservation.getCustomerEmail());
+	}
+	
+	
+	
+	   @FXML
+	    void reservationApproveButtonListener(ActionEvent event) {
+		   Alert alert = new Alert(AlertType.CONFIRMATION);
+	    	alert.setTitle("Reservation");
+	    	alert.setHeaderText("Approve Reservation");
+	    	alert.setContentText("Are you sure you want to approve the reservation made by " + selectedReservation.getCustomerEmail() + "?");
+	    	
+	    	Optional<ButtonType> result = alert.showAndWait();
+	    	if (result.get() == ButtonType.OK){
+	        	ReservationDAOImpl ReservationDAO = new ReservationDAOImpl();
+	        	ReservationDAO.updateStatus(selectedReservation, "Approved");
+	        	selectedReservation = null;
+	        	resetReservationDetails();
+	        	loadReservationTable(((Vendor)vendor).getVendorId());
+	    	} 
+	    }
+
+	    @FXML
+	    void reservationDenyButtonListener(ActionEvent event) {
+	    	Alert alert = new Alert(AlertType.CONFIRMATION);
+	    	alert.setTitle("Reservation");
+	    	alert.setHeaderText("Deny Reservation");
+	    	alert.setContentText("Are you sure you want to deny the reservation made by " + selectedReservation.getCustomerEmail() + "?");
+	    	
+	    	Optional<ButtonType> result = alert.showAndWait();
+	    	if (result.get() == ButtonType.OK){
+	        	ReservationDAOImpl ReservationDAO = new ReservationDAOImpl();
+	        	ReservationDAO.updateStatus(selectedReservation, "Not Approved");
+	        	selectedReservation = null;
+	        	resetReservationDetails();
+	        	loadReservationTable(((Vendor)vendor).getVendorId());
+	    	} 
+	    }
+	    
+	    public void resetReservationDetails() {
+	    	selectedReservation = null;
+	    	reservationApproveButton.setVisible(false);
+			reservationAttractionLabel.setVisible(false);
+			reservationCustomerEmailLabel.setVisible(false);
+			reservationDenyButton.setVisible(false);
+			reservationNumOfPeopleLabel.setVisible(false);
+			reservationResetButton.setVisible(false);
+			reservationStartDateLabel.setVisible(false);
+			reservationTotalLabel.setVisible(false);
+			reservationStatusPane.setVisible(false);
+			reservationStatusText.setVisible(false);
+	    }
+
+	    @FXML
+	    void reservationResetButtonListener(ActionEvent event) {
+	    	resetReservationDetails();
+	    }
     
     public void prepareFormToUpdateAttraction() {
     	resetFields();
@@ -167,6 +455,8 @@ public class VendorDashboardController {
 		welcomeLabel.setText("Welcome, " + ((Vendor) vendor).getName());
 
     	loadAttractionTable(((Vendor)vendor).getVendorId());
+    	loadReservationTable(((Vendor)vendor).getVendorId());
+    	loadDashboardStats();
 	}
 
     
@@ -260,6 +550,36 @@ public class VendorDashboardController {
     	
     }
     
+    public void loadReservationTable(int vendorId) {
+    	ReservationDAOImpl ReservationDAO = new ReservationDAOImpl();
+    	
+    	List<Reservation> reservationList = new ArrayList<Reservation>();
+    	
+    	reservationList = ReservationDAO.getReservartionByVendorId(vendorId);
+    	
+    	ObservableList<Reservation> observableReservations = FXCollections.observableArrayList(reservationList);
+    	
+    	reservationsTableView.setItems(observableReservations);
+    	
+    }
+    
+    public void loadDashboardStats() {
+    	VendorDAOImpl VendorDAO = new VendorDAOImpl();
+    	
+    	
+    	
+    	Dashboard dashboard = new Dashboard();
+    	 
+    	dashboard = VendorDAO.getDashboardStats(((Vendor)vendor).getVendorId());
+    	dashboardTotalRevenueLabel.setText("$ " + currency.format(dashboard.getTotalRevenue())); 
+    	dashboardAttration1Label.setText("1 - " + dashboard.getMostFamousAttractions().get(0));
+    	dashboardAttration2Label.setText("2 - " + dashboard.getMostFamousAttractions().get(1));
+    	dashboardAttration3Label.setText("3 - " + dashboard.getMostFamousAttractions().get(2));
+    	dashboardApprovedReservationsLabel.setText(" "+dashboard.getApprovedReservations());
+    	dashboardPendingReservationsButton.setText("(" + dashboard.getPendingReservations() + ") pending reservation(s)");
+    	
+    }
+    
     public void LogoutButtonListener(ActionEvent e) {
     	try {
         	// Instantiate the FXMLLoader object for loading the UI 
@@ -298,8 +618,6 @@ public class VendorDashboardController {
         	resetFields();
         	loadAttractionTable(((Vendor)vendor).getVendorId());
     	} 
-    	
-    	
     } 
     
     public void attractionResetButtonListener() {

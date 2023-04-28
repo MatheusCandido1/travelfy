@@ -18,6 +18,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 import travelfy.dao.UserDAOImpl;
 import travelfy.models.User;
+import travelfy.models.Vendor;
 import javafx.scene.control.Button;
 
 public class RegisterController {
@@ -70,33 +71,42 @@ public class RegisterController {
     }
     
     public void navigate(User loggedUser, ActionEvent e) {
-		try {
-    	// Instantiate the FXMLLoader object for loading the UI 
-    	FXMLLoader loader = new FXMLLoader();
-    	// specify the file location
-    	loader.setLocation(getClass().getResource("/travelfy/views/Dashboard.fxml"));
-		// the object representing the root node of the scene; load the UI
-		Parent parent = loader.load();
-	
-		// set the scene
-		Scene scene = new Scene(parent);
-	   	
-    	// get the current window; i.e. the stage
-		VendorDashboardController controller = loader.getController();
-		
-		controller.initData(loggedUser);
-    	// change the title of the window
-    	Stage stage = (Stage)((Node)e.getSource()).getScene().getWindow();
-    	// change the title of the window
-    	stage.setTitle("Travelfy - Dashboard");
-    	// set the scene for the stage
-    	stage.setResizable(false);
-    	stage.setScene(scene);
-    	
-    	stage.show();
-		} catch(Exception ex) {
-			System.out.print(ex.getMessage());
-		}
+    	try {
+        	// Instantiate the FXMLLoader object for loading the UI 
+        	FXMLLoader loader = new FXMLLoader();
+        	// specify the file location
+        	if(loggedUser instanceof Vendor) {
+        		loader.setLocation(getClass().getResource("/travelfy/views/VendorDashboard.fxml"));
+        	} else {
+        		loader.setLocation(getClass().getResource("/travelfy/views/CustomerDashboard.fxml"));
+        	}
+    		// the object representing the root node of the scene; load the UI
+    		Parent parent = loader.load();
+   	
+			// set the scene
+			Scene scene = new Scene(parent);
+
+        	if(loggedUser instanceof Vendor) {
+        		// get the current window; i.e. the stage
+        		VendorDashboardController controller = loader.getController();
+    			controller.initData(loggedUser);
+        	} else {
+    			CustomerDashboardController controller = loader.getController();
+    			controller.initData(loggedUser);
+        	}
+			
+	    	// change the title of the window
+	    	Stage stage = (Stage)((Node)e.getSource()).getScene().getWindow();
+	    	// change the title of the window
+	    	stage.setTitle("Travelfy - Dashboard");
+	    	// set the scene for the stage
+	    	stage.setResizable(false);
+	    	stage.setScene(scene);
+	    	
+	    	stage.show(); 
+    		} catch(Exception ex) {
+    			System.out.print(ex.getMessage());
+    		}
 }
     
     public void travellerButtonListener() {

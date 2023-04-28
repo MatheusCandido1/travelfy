@@ -20,6 +20,7 @@ public class AttractionDAOImpl implements AttractionDAO {
 		try {
 			Statement stmt = conn.createStatement();
 			
+			System.out.println(attraction.getVendorId());
 			String query = "INSERT INTO " + ATTRACTION_TABLE_NAME + " (name, type, price, city, state, vendor_id, image) VALUES (?,?,?,?,?,?,?)";
 			PreparedStatement preparedStmt = conn.prepareStatement(query);
 			

@@ -48,7 +48,7 @@ public class UserDAOImpl implements UserDAO {
 			else {
 				String query2 = "SELECT u.id as user_id, u.phone, u.email, u.password, v.id as vendor_id, v.name, v.business_identification_number"
 						+ " FROM vendors as v"
-						+ " INNER JOIN users as u on v.user_id = user_id"
+						+ " INNER JOIN users u on v.user_id = u.id"
 						+ " WHERE u.email = ? AND u.password = ?";
 				
 				PreparedStatement preparedStmt2 = conn.prepareStatement(query2);

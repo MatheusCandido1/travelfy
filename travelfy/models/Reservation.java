@@ -1,20 +1,36 @@
 package travelfy.models;
 
-import java.util.Date;
-
 public class Reservation {
 	int id;
 	String startDate;
-	String endDate;
+	String status;
 	int customerId;
 	int attractionId;
 	int numOfPeople;
 	double subtotal;
 	double tax;
 	double total;
+	String customerEmail;
+	String attractionName;
 	
 	
 	public Reservation() {}
+	
+	public void setCustomerEmail(String customerEmail) {
+		this.customerEmail = customerEmail;
+	}
+	
+	public String getCustomerEmail() {
+		return customerEmail;
+	}
+	
+	public void setAttractionName(String attractionName) {
+		this.attractionName = attractionName;
+	}
+	
+	public String getAttractionName() {
+		return attractionName;
+	}
 	
 	public int getId() {
 		return id;
@@ -23,18 +39,20 @@ public class Reservation {
 		this.id = id;
 	}
 	
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
 	public String getStartDate() {
 		return startDate;
 	}
 	public void setStartDate(String startDate) {
 		this.startDate = startDate;
 	}
-	public String getEndDate() {
-		return endDate;
-	}
-	public void setEndDate(String endDate) {
-		this.endDate = endDate;
-	}
+	
 	public int getCustomerId() {
 		return customerId;
 	}

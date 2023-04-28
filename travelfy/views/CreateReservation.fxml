@@ -16,16 +16,14 @@
       <Label layoutX="233.0" layoutY="70.0" text="Confirm your reservation" />
       <ImageView fx:id="attractionImageImageView" fitHeight="177.0" fitWidth="235.0" layoutX="22.0" layoutY="102.0" pickOnBounds="true" preserveRatio="true" />
       <DatePicker fx:id="startDateDatePicker" layoutX="327.0" layoutY="121.0" prefHeight="25.0" prefWidth="228.0" />
-      <DatePicker fx:id="endDateDatePicker" layoutX="327.0" layoutY="181.0" prefHeight="25.0" prefWidth="228.0" />
-      <TextField fx:id="numOfPeopleTextField" layoutX="327.0" layoutY="234.0" onKeyPressed="#calculateTax" prefHeight="25.0" prefWidth="228.0" />
+      <TextField fx:id="numOfPeopleTextField" layoutX="327.0" layoutY="184.0" onKeyPressed="#calculateTax" prefHeight="25.0" prefWidth="228.0" />
       <Line endX="15.0" endY="278.0" layoutX="277.0" layoutY="136.0" startX="15.0" startY="-33.0" stroke="#004643">
          <rotationAxis>
             <Point3D />
          </rotationAxis>
       </Line>
-      <Label layoutX="324.0" layoutY="104.0" text="Start Date" />
-      <Label layoutX="326.0" layoutY="163.0" text="End Date" />
-      <Label layoutX="329.0" layoutY="217.0" text="Number of People" />
+      <Label layoutX="327.0" layoutY="104.0" text="Date:" />
+      <Label layoutX="327.0" layoutY="165.0" text="Number of People:" />
       <Button fx:id="saveButton" layoutX="327.0" layoutY="388.0" mnemonicParsing="false" onAction="#saveButtonListener" prefHeight="25.0" prefWidth="228.0" style="-fx-background-color: #004643#004643; -fx-text-fill: white;" text="Save" />
       <Label fx:id="subtotalLabel" layoutX="327.0" layoutY="274.0" text="Subtotal: $ 0,00" />
       <Label fx:id="taxLabel" layoutX="328.0" layoutY="310.0" text="Tax: $ 0,00" />
